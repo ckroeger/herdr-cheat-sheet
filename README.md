@@ -7,6 +7,8 @@ Static pages (no build step), English / Deutsch switchable, for **both** Herdr v
 | **Herdr CLI** | the terminal tool (`herdr`), tmux-style | yes: `Ctrl+B`, then a key             |
 | **Herdr App** | the desktop app (`herdr-app`)           | no: single chords like `Ctrl+Shift+O` |
 
+**Retro View** (amber monitor theme): toggle with the button at the top, or via URL `?retro=1` / `?retro=0` (combine: `?v=cli&retro=1`). The URL parameter wins over the remembered setting.
+
 Pages:
 
 - `index.html` – cheat sheet (filterable)

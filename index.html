@@ -16,7 +16,7 @@ function render(){
   upd(); document.title=t("title");
   $("title").textContent=t("title"); $("sub").textContent=t("sub");
   $("note").innerHTML=t("note");
-  $("q").placeholder=t("search"); $("gameLink").textContent="🎮 "+t("game"); $("gameLink").href="game.html?v="+variant;
+  $("q").placeholder=t("search"); $("gameLink").textContent="🎮 "+t("game"); $("gameLink").href="game.html"+qs();
   $("foot").textContent=t("footer");
   const f=$("q").value.toLowerCase();
   $("grid").innerHTML=set().groups.map(g=>{

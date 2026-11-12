@@ -36,7 +36,7 @@ try{best=+localStorage.getItem("best")||0}catch(e){}
 const gname=g=>g[lang];
 function texts(){
   upd(); document.title=t("gameTitle");
-  $("title").textContent=t("gameTitle"); $("sub").textContent=t("gameSub"); $("back").textContent="← "+t("back"); $("back").href="index.html?v="+variant; $("fs").style.display=set().prefix?"none":"";
+  $("title").textContent=t("gameTitle"); $("sub").textContent=t("gameSub"); $("back").textContent="← "+t("back"); $("back").href="index.html"+qs(); $("fs").style.display=set().prefix?"none":"";
   $("lGroup").textContent=t("noGroup"); $("lRounds").textContent=t("mode");
   $("start").textContent=t("start"); $("again").textContent=t("again"); $("doneT").textContent=t("done");
   $("sRound").textContent=t("round"); $("sScore").textContent=t("score"); $("sStreak").textContent=t("streak"); $("sBest").textContent=t("best");

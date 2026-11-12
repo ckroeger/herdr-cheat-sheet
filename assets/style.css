@@ -1,5 +1,5 @@
-:root{--bg:#0f1117;--card:#181b24;--fg:#e6e8ee;--mut:#8b91a3;--acc:#7c9cff;--ok:#4ade80;--bad:#f87171;--bd:#2a2f3d}
-@media(prefers-color-scheme:light){:root{--bg:#f6f7fb;--card:#fff;--fg:#1a1d27;--mut:#60667a;--acc:#3b5bdb;--ok:#15803d;--bad:#dc2626;--bd:#dfe3ee}}
+:root{--stripe-a:#0a0c11;--stripe-b:#262a34;--bg:#0f1117;--card:#181b24;--fg:#e6e8ee;--mut:#8b91a3;--acc:#7c9cff;--ok:#4ade80;--bad:#f87171;--bd:#2a2f3d}
+@media(prefers-color-scheme:light){:root{--stripe-a:#ffffff;--stripe-b:#eceef5;--bg:#f6f7fb;--card:#fff;--fg:#1a1d27;--mut:#60667a;--acc:#3b5bdb;--ok:#15803d;--bad:#dc2626;--bd:#dfe3ee}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}
 .wrap{max-width:1100px;margin:0 auto;padding:16px}
@@ -15,8 +15,6 @@ input[type=search]{width:100%;padding:10px 12px;border-radius:8px;border:1px sol
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
 .card h2{margin:0 0 8px;font-size:1.05rem;color:var(--acc)}
-.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:6px 0;border-top:1px solid var(--bd)}
-.row:first-of-type{border-top:0}
 kbd{display:inline-block;min-width:1.8em;text-align:center;padding:2px 7px;border:1px solid var(--bd);border-bottom-width:3px;border-radius:6px;background:var(--bg);font:600 .85rem ui-monospace,monospace;margin-left:3px;white-space:nowrap}
 .keys{white-space:nowrap}.plus{color:var(--mut);margin-left:3px}
 footer{color:var(--mut);font-size:.85rem;margin-top:24px}
@@ -34,3 +32,15 @@ footer{color:var(--mut);font-size:.85rem;margin-top:24px}
 .shake{animation:sh .25s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .hidden{display:none}
 select{background:var(--card);color:var(--fg);border:1px solid var(--bd);border-radius:8px;padding:8px}
+
+/* zebra striping (alternating row colours) */
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:6px 8px;margin:0 -8px;border-radius:6px}
+.row:nth-of-type(odd){background:var(--stripe-a)}
+.row:nth-of-type(even){background:var(--stripe-b)}
+/* retro view: amber phosphor monitor */
+html[data-retro="1"]{--bg:#000;--card:#050300;--fg:#ffb000;--mut:#b37a00;--acc:#ffcc33;--ok:#ffcc33;--bad:#ff6a00;--bd:#5c3d00;--stripe-a:#000;--stripe-b:#241700}
+html[data-retro="1"] body{font-family:ui-monospace,"Courier New",monospace;text-shadow:0 0 6px rgba(255,176,0,.55)}
+html[data-retro="1"] kbd{border-radius:0;background:#000;color:#ffcc33}
+html[data-retro="1"] .card,html[data-retro="1"] .stage,html[data-retro="1"] .stat,html[data-retro="1"] button,html[data-retro="1"] .btn,html[data-retro="1"] input,html[data-retro="1"] select,html[data-retro="1"] .note,html[data-retro="1"] .row{border-radius:0}
+html[data-retro="1"] .primary,html[data-retro="1"] .lang button.on,html[data-retro="1"] button.on{background:#ffb000;color:#000;border-color:#ffb000;text-shadow:none}
+html[data-retro="1"] body::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 2px,rgba(0,0,0,.25) 2px 3px)}
