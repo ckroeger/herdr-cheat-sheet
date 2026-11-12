@@ -2,10 +2,10 @@
 
 Static pages (no build step), English / Deutsch switchable, for **both** Herdr variants – pick one at the top of each page (remembered in the browser, or via `?v=cli` / `?v=app`):
 
-| Variant | What it is | Prefix |
-|---|---|---|
-| **Herdr CLI** | the terminal tool (`herdr`), tmux-style | yes: `Ctrl+B`, then a key |
-| **Herdr App** | the desktop app (`herdr-app`) | no: single chords like `Ctrl+Shift+O` |
+| Variant       | What it is                              | Prefix                                |
+| ------------- | --------------------------------------- | ------------------------------------- |
+| **Herdr CLI** | the terminal tool (`herdr`), tmux-style | yes: `Ctrl+B`, then a key             |
+| **Herdr App** | the desktop app (`herdr-app`)           | no: single chords like `Ctrl+Shift+O` |
 
 Pages:
 
@@ -13,6 +13,8 @@ Pages:
 - `game.html` – key trainer: an action is shown, you press the shortcut
 
 Data lives in `assets/set-cli.js` and `assets/set-app.js` (shortcuts), `assets/strings.js` (EN/DE texts).
+
+[![Publish to GitHub Pages](https://github.com/ckroeger/herdr-cheat-sheet/actions/workflows/pages.yml/badge.svg)](https://github.com/ckroeger/herdr-cheat-sheet/actions/workflows/pages.yml)
 
 ## Where the keybindings live on your system
 
@@ -43,7 +45,7 @@ Open <http://localhost:8000> (cheat sheet) and <http://localhost:8000/game.html>
 
 1. Create the repo, see [create-repo.md](create-repo.md).
 2. Repo → Settings → Pages → Source: **GitHub Actions** (one time).
-3. Actions tab → **Publish to GitHub Pages** → *Run workflow*.
+3. Actions tab → **Publish to GitHub Pages** → _Run workflow_.
 
 The workflow only runs on manual trigger (`workflow_dispatch`).
 
