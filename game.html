@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Herdr Key Trainer</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><div class="wrap">
+<header><h1 id="title"></h1><nav><span class="lang" id="lang"></span><a class="btn" id="back" href="index.html"></a></nav></header>
+<p class="sub" id="sub"></p>
+<div id="menu" class="stage">
+  <p><label><span id="lGroup"></span>: <select id="group"></select></label>
+  <label style="margin-left:12px"><span id="lRounds"></span>: <select id="rounds"><option>10</option><option>20</option><option value="0">∞</option></select></label></p>
+  <button class="primary" id="start"></button>
+</div>
+<div id="play" class="hidden">
+  <div class="stats">
+    <div class="stat"><span id="sRound"></span><b id="vRound"></b></div>
+    <div class="stat"><span id="sScore"></span><b id="vScore">0</b></div>
+    <div class="stat"><span id="sStreak"></span><b id="vStreak">0</b></div>
+    <div class="stat"><span id="sBest"></span><b id="vBest">0</b></div>
+  </div>
+  <div class="stage" id="stage">
+    <div class="cat" id="cat"></div>
+    <div class="cat" id="prompt"></div>
+    <div class="q" id="question"></div>
+    <div class="steps"><div class="step" id="st1"></div><div class="step" id="st2"></div></div>
+    <div class="fb" id="fb"></div>
+    <p><button id="hint"></button> <button id="skip"></button></p>
+    <div class="cat" id="hintBox"></div>
+  </div>
+</div>
+<div id="end" class="stage hidden"><h2 id="doneT"></h2><p class="q" id="final"></p><button class="primary" id="again"></button></div>
+</div>
+<script src="assets/keys.js"></script><script src="assets/i18n.js"></script>
+<script>
+const $=id=>document.getElementById(id), upd=langButtons($("lang"));
+let pool=[],cur=null,total=0,round=0,score=0,streak=0,stage=1,hinted=false,locked=false,best=0;
+try{best=+localStorage.getItem("best")||0}catch(e){}
+const gname=g=>g[lang];
+function texts(){
+  upd(); document.title=t("gameTitle");
+  $("title").textContent=t("gameTitle"); $("sub").textContent=t("gameSub"); $("back").textContent="← "+t("back");
+  $("lGroup").textContent=t("noGroup"); $("lRounds").textContent=t("mode");
+  $("start").textContent=t("start"); $("again").textContent=t("again"); $("doneT").textContent=t("done");
+  $("sRound").textContent=t("round"); $("sScore").textContent=t("score"); $("sStreak").textContent=t("streak"); $("sBest").textContent=t("best");
+  $("hint").textContent=t("hint"); $("skip").textContent=t("skip"); $("prompt").textContent=t("prompt");
+  $("st1").textContent=t("step1");
+  const sel=$("group"), v=sel.value||"all";
+  sel.innerHTML='<option value="all">'+t("all")+"</option>"+HERDR.groups.map(g=>'<option value="'+g.id+'">'+gname(g)+"</option>").join("");
+  sel.value=v;
+  if(cur){ $("question").textContent=cur.it[lang]; $("cat").textContent=gname(cur.g); setStage(stage); }
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function start(){
+  const gid=$("group").value, n=+$("rounds").value;
+  pool=[]; HERDR.groups.filter(g=>gid==="all"||g.id===gid).forEach(g=>g.items.forEach(it=>pool.push({g,it})));
+  shuffle(pool); total=n; round=0; score=0; streak=0; show("play"); next();
+}
+function show(w){["menu","play","end"].forEach(x=>$(x).classList.toggle("hidden",x!==w))}
+function next(){
+  if(total&&round>=total){ end(); return; }
+  if(!pool.length) return end();
+  cur=pool[round%pool.length]; round++; hinted=false; locked=false;
+  $("fb").textContent=""; $("fb").className="fb"; $("hintBox").textContent="";
+  $("vRound").textContent=round+(total?" / "+total:""); $("vScore").textContent=score; $("vStreak").textContent=streak; $("vBest").textContent=best;
+  $("question").textContent=cur.it[lang]; $("cat").textContent=gname(cur.g);
+  setStage(cur.g.noPrefix?2:1);
+}
+function setStage(s){
+  stage=s;
+  $("st1").className="step"+(s===1?" on":" done");
+  $("st2").className="step"+(s===2?" on":"");
+  $("st2").textContent=cur&&cur.g.noPrefix?t("noPrefix")+": "+t("step2"):t("step2");
+  if(cur&&cur.g.noPrefix) $("st1").className="step done";
+}
+function end(){ show("end"); $("final").textContent=t("score")+": "+score+" · "+t("best")+": "+best; }
+function showHint(){ hinted=true; $("hintBox").innerHTML=kbdHtml(cur.g,cur.it); }
+function fail(){
+  streak=0; $("vStreak").textContent=0; $("fb").className="fb bad";
+  $("fb").innerHTML=t("wrong")+" "+kbdHtml(cur.g,cur.it);
+  $("stage").classList.remove("shake"); void $("stage").offsetWidth; $("stage").classList.add("shake");
+  locked=true; setTimeout(()=>{ if(cur) next(); },1800);
+}
+function ok(){
+  streak++; score+=hinted?5:10+Math.min(streak,10); best=Math.max(best,score); try{localStorage.setItem("best",best)}catch(e){}
+  $("fb").className="fb ok"; $("fb").textContent=t("correct");
+  $("vScore").textContent=score; $("vStreak").textContent=streak; $("vBest").textContent=best;
+  locked=true; setTimeout(next,600);
+}
+function token(e){
+  const k=e.key;
+  if(["Shift","Control","Alt","Meta"].includes(k)) return null;
+  if(k==="Tab") return e.shiftKey?"shift+tab":"tab";
+  if(k.length===1){
+    if(/[a-z]/i.test(k)) return (e.shiftKey?"shift+":"")+k.toLowerCase();
+    return k;
+  }
+  return k.toLowerCase();
+}
+addEventListener("keydown",e=>{
+  if($("play").classList.contains("hidden")||locked||!cur) return;
+  if(document.activeElement&&document.activeElement.blur) document.activeElement.blur();
+  if(stage===1){
+    if(e.ctrlKey&&e.key.toLowerCase()==="b"){ e.preventDefault(); setStage(2); }
+    else if(!["Shift","Control","Alt","Meta"].includes(e.key)){ e.preventDefault(); fail(); }
+    return;
+  }
+  const tk=token(e); if(tk===null) return;
+  e.preventDefault();
+  const m=cur.it.m;
+  (m==="1..9"?/^[1-9]$/.test(tk):tk===m)?ok():fail();
+});
+$("start").onclick=start; $("again").onclick=()=>show("menu"); $("hint").onclick=showHint; $("skip").onclick=()=>{if(!locked){streak=0;next()}};
+window.onLang=texts; texts();
+</script></body></html>
