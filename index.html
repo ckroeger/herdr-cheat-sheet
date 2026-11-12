@@ -9,18 +9,18 @@
 <div class="grid" id="grid"></div>
 <footer id="foot"></footer>
 </div>
-<script src="assets/keys.js"></script><script src="assets/i18n.js"></script>
+<script src="assets/strings.js"></script><script src="assets/set-cli.js"></script><script src="assets/set-app.js"></script><script src="assets/i18n.js"></script>
 <script>
-const $=id=>document.getElementById(id), upd=langButtons($("lang"));
+const $=id=>document.getElementById(id), upd=controls($("lang"));
 function render(){
   upd(); document.title=t("title");
   $("title").textContent=t("title"); $("sub").textContent=t("sub");
-  $("note").innerHTML="<b>"+t("prefixNote")+":</b> <kbd>"+(lang==="de"?"Strg+B":"Ctrl+B")+"</kbd> — "+t("prefixText");
-  $("q").placeholder=t("search"); $("gameLink").textContent="🎮 "+t("game");
+  $("note").innerHTML=t("note");
+  $("q").placeholder=t("search"); $("gameLink").textContent="🎮 "+t("game"); $("gameLink").href="game.html?v="+variant;
   $("foot").textContent=t("footer");
   const f=$("q").value.toLowerCase();
-  $("grid").innerHTML=HERDR.groups.map(g=>{
-    const rows=g.items.filter(i=>!f||(i.en+" "+i.de+" "+i.k).toLowerCase().includes(f));
+  $("grid").innerHTML=set().groups.map(g=>{
+    const rows=g.items.filter(i=>!f||(i.en+" "+i.de+" "+i.k.join(" ")).toLowerCase().includes(f));
     if(!rows.length) return "";
     return '<section class="card"><h2>'+g[lang]+"</h2>"+rows.map(i=>'<div class="row"><span>'+i[lang]+'</span><span class="keys">'+kbdHtml(g,i)+"</span></div>").join("")+"</section>";
   }).join("");
